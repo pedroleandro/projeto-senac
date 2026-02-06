@@ -1,0 +1,19 @@
+# IDEs
+.idea/
+.vscode/
+
+# Dependências
+/vendor/
+
+# Variáveis de ambiente
+.env
+
+# Logs e cache
+/storage/logs/*
+/storage/cache/*
+/storage/sessions/*
+/storage/uploads/*
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
