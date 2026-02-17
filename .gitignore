@@ -9,6 +9,7 @@
 .env
 
 # Logs e cache
+/storage
 /storage/logs/*
 /storage/cache/*
 /storage/sessions/*
