@@ -16,7 +16,7 @@
     </header>
 
     <section>
-        <a href="<?= BASE_URL ?>/login">Entrar</a>
+        <a href="<?= $_ENV['URL_HOMOLOG'] ?>/login">Entrar</a>
     </section>
 </main>
 

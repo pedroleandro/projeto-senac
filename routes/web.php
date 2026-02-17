@@ -1,8 +1,18 @@
 <?php
 
-use App\Controllers\HomeController;
-use App\Controllers\UserController;
+use \CoffeeCode\Router\Router;
 
-/** @var $router */
-$router->get('/', [HomeController::class, 'index']);
-$router->get('/login', [UserController::class, 'login']);
+$router = new Router(url(), "@");
+
+$router->namespace("App\Controllers");
+$router->get('/', 'HomeController@home');
+$router->get('/login', 'UserController@login');
+
+$router->namespace('App\Controllers')->group('/error');
+$router->get('/{errorCode}', 'HomeController@error');
+
+$router->dispatch();
+
+if ($router->error()) {
+    redirect("/error/{$router->error()}");
+}
