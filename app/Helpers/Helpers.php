@@ -34,3 +34,25 @@ function redirect(string $url): void
     header("Location: {$location}");
     exit;
 }
+
+/** VALIDATE */
+
+function csrf_input(): string
+{
+    session()->csrf();
+    return "<input type='hidden' name='csrf_token' value='" . (session()->csrf_token ?? "") . "'/>";
+}
+
+function csrf_verify(array $request): bool
+{
+    if(empty(session()->csrf_token) || empty($request['csrf_token']) || $request['csrf_token'] != session()->csrf_token){
+        return false;
+    }
+
+    return true;
+}
+
+function session()
+{
+    return new \App\Core\Session();
+}
