@@ -26,6 +26,7 @@
       "App\\": "app/"
     },
     "files": [
+      "config/app.php",
       "app/Helpers/csrf.php",
       "app/Helpers/old.php",
       "app/Helpers/url.php"
