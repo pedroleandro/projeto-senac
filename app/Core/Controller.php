@@ -2,17 +2,23 @@
 
 namespace App\Core;
 
+use League\Plates\Engine;
+
 class Controller
 {
-    protected function view(string $view, array $data = []): void
+    protected ?Engine $view = null;
+
+    public function __construct(string $pathView = "Web")
     {
-        extract($data);
-        require __DIR__ . "/../Views/{$view}.php";
+        $this->view = new Engine(__DIR__ . "/../Views/" . $pathView, "php");
     }
 
-    protected function redirect(string $url): void
+    protected function validateCsrfToken(array $data, string $route): void
     {
-        header("Location: {$url}");
-        exit;
+        if (!$data || !csrf_verify($data['_csrf'] ?? null)) {
+            Message::error("Token de segurança inválido");
+            redirect($route);
+            return;
+        }
     }
 }
