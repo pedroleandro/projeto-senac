@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-class User
+use App\Core\AbstractModel;
+
+class User extends AbstractModel
 {
-    public function hello()
-    {
-        return "Olá, Mundo!";
-    }
+
 }
