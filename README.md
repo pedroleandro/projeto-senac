@@ -1,166 +1,236 @@
-# 🚀 Projeto Senac — MVC em PHP Puro
+# Projeto Senac — MVC em PHP Puro
 
-<p align="center">
-  <strong>Mini framework MVC desenvolvido em PHP puro</strong><br>
-  Estrutura simples, profissional e ideal para fins educacionais
-</p>
+Mini framework MVC desenvolvido em PHP puro para fins educacionais. Inspirado em frameworks modernos como o Laravel, mas com estrutura simples e transparente — ideal para aprender como uma aplicação web funciona por dentro.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/PHP-8%2B-blue?logo=php">
-  <img src="https://img.shields.io/badge/Composer-Autoload-orange?logo=composer">
-  <img src="https://img.shields.io/badge/Apache-XAMPP-red?logo=apache">
-  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow">
-</p>
+![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue?logo=php)
+![Composer](https://img.shields.io/badge/Composer-Autoload-orange?logo=composer)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwindcss)
+![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
 
 ---
 
-## 📌 Sobre o projeto
+## O que é esse projeto?
 
-O **Projeto Senac** é um **mini framework MVC em PHP puro**, criado com foco **educacional**, inspirado em frameworks modernos como o Laravel, porém com uma estrutura **mais simples e transparente**, ideal para estudo e ensino de backend.
+Um ponto de partida para construir sites e sistemas em PHP sem depender de um framework completo. Você encontra aqui o essencial já configurado: roteamento, MVC, conexão com banco, sessões, autenticação, flash messages e proteção CSRF.
 
-O projeto utiliza:
-- PHP puro
-- Composer para autoload
-- Front Controller
-- Rotas amigáveis
-- VirtualHost para ambiente profissional
+O professor explica como funciona. O aluno usa como base e constrói em cima.
 
 ---
 
-## 👨‍🏫 Autor
+## O que já vem incluído
 
-Projeto desenvolvido por **Pedro Leandro Gomes da Silva**, com foco educacional, para ensino de:
-
-- PHP Orientado a Objetos
-- Arquitetura MVC
-- Organização profissional de projetos fullstack
-- Boas práticas sem uso de frameworks
-
-📌 *Projeto criado para fins educacionais — Senac*
-
----
-## 📚 Público-alvo
-
-Este projeto é indicado para:
-- Estudantes de PHP
-- Cursos técnicos (ex: Senac)
-- Introdução a MVC e organização de projetos
+| Recurso | Descrição |
+|---|---|
+| **Roteamento** | `coffeecode/router` com rotas GET e POST amigáveis |
+| **MVC** | Controllers, Models e Views separados por responsabilidade |
+| **Template Engine** | `league/plates` para renderização de views PHP |
+| **Banco de dados** | Conexão PDO com padrão Singleton + AbstractModel com query builder |
+| **Autenticação** | `Auth` com sessão, controle de login e sistema de permissões por role |
+| **Flash Messages** | `Message` com tipos semânticos e partial Tailwind pronto |
+| **Proteção CSRF** | Token gerado e validado automaticamente em formulários |
+| **Sessão segura** | `Session` com cookies httponly, samesite e regeneração de ID |
+| **E-mail** | `PHPMailer` configurado e pronto para uso |
+| **Variáveis de ambiente** | `vlucas/phpdotenv` para configuração via `.env` |
+| **Paginação** | `coffeecode/paginator` incluso |
+| **Tailwind CSS** | CDN incluído nas views, pronto para uso imediato |
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do projeto
 
-```txt
+```
 projeto-senac/
-│
 ├── app/
-│   ├── Controllers/
-│   └── Core/
-│   └── Models/
-│
+│   ├── Controllers/        # Lógica de cada rota
+│   ├── Core/               # Núcleo do framework (não edite sem entender)
+│   │   ├── AbstractModel.php
+│   │   ├── Auth.php
+│   │   ├── Connection.php
+│   │   ├── Controller.php
+│   │   ├── Email.php
+│   │   ├── Message.php
+│   │   ├── Permission.php
+│   │   ├── Session.php
+│   │   └── SessionTimeoutMiddleware.php
+│   ├── Helpers/            # Funções globais: url(), redirect(), csrf_input(), old()
+│   ├── Models/             # Models da aplicação (estendem AbstractModel)
+│   │   └── Role/           # Sistema de perfis e permissões
+│   ├── Services/           # Lógica de negócio complexa (organize aqui)
+│   └── Views/
+│       ├── Admin/          # Views da área administrativa
+│       ├── Web/            # Views da área pública
+│       └── partials/       # Componentes reutilizáveis (ex: flash.php)
+├── config/
+│   └── app.php             # Constantes da aplicação
 ├── public/
 │   ├── css/
-│   ├── images/
-│   ├── js/
-│   ├── .htaccess
-│   └── index.php
-│
+│   └── js/
 ├── routes/
-│   └── web.php
-│
+│   └── web.php             # Todas as rotas da aplicação
 ├── storage/
-│   └── cache/
-│   └── logs/
-│   └── sessions/
+│   ├── sessions/
 │   └── uploads/
-│
-├── vendor/
-│
-├── views/
-│   └── user/
-│       └── login.php
-│   └── home.php/
-│
-├── .env
-├── .gitignore
+├── .env                    # Suas configurações locais (não sobe para o Git)
+├── .env.example            # Modelo de configuração
+├── .htaccess               # Redireciona tudo para index.php
 ├── composer.json
-└── README.md
+└── index.php               # Front Controller — ponto de entrada único
 ```
 
-## ⚙️ Requisitos
-
-Para executar o projeto corretamente, é necessário ter o seguinte ambiente configurado:
-
-- 🐘 **PHP 8.0+**
-- 📦 **Composer**
-- 🌐 **Servidor Apache**
-- 💻 **Sistema operacional**: Windows, Linux ou macOS
 ---
 
+## Como instalar
 
-## ▶️ Como executar o projeto
+### Requisitos
 
-Siga os passos abaixo para rodar o projeto corretamente em ambiente local.
+- PHP 8.1+
+- Composer
+- Apache com `mod_rewrite` ativado (XAMPP funciona bem)
+- MySQL 5.7+ ou MariaDB
 
----
+### Passo a passo
 
-### 1️⃣ Clonar o repositório
-
+**1. Clone o repositório**
 ```bash
 git clone https://github.com/seu-usuario/projeto-senac.git
 cd projeto-senac
 ```
 
-### 2️⃣ Instalar as dependências com Composer
-
+**2. Instale as dependências**
 ```bash
 composer install
 ```
 
-### 3️⃣ Configurar o VirtualHost (forma profissional)
-
-Abra o arquivo do Apache:
-
-```txt
-C:/xampp/apache/conf/extra/httpd-vhosts.conf
+**3. Configure o ambiente**
+```bash
+cp .env.example .env
 ```
+Edite o `.env` com seus dados de banco e URL.
 
-Adicione o seguinte VirtualHost:
+**4. Configure o VirtualHost no Apache**
+
+Abra `C:/xampp/apache/conf/extra/httpd-vhosts.conf` e adicione:
 
 ```apache
 <VirtualHost *:80>
     ServerName projeto-senac.local
-    DocumentRoot "C:/xampp/htdocs/projeto-senac/public"
-
-    <Directory "C:/xampp/htdocs/projeto-senac/public">
+    DocumentRoot "C:/xampp/htdocs/projeto-senac"
+    <Directory "C:/xampp/htdocs/projeto-senac">
         AllowOverride All
         Require all granted
     </Directory>
-
-    ErrorLog "C:/xampp/htdocs/projeto-senac/storage/logs/error.log"
-CustomLog "C:/xampp/htdocs/projeto-senac/storage/logs/access.log" common
 </VirtualHost>
 ```
 
-### 4️⃣ Configurar o arquivo hosts
+**5. Adicione o host no sistema**
 
-Edite o arquivo do sistema:
-
-```txt
-C:\Windows\System32\drivers\etc\hosts
+Edite `C:\Windows\System32\drivers\etc\hosts` e adicione:
 ```
-
-Reinicie o Apache após essa configuração.
-
-Adicione a linha:
-```txt
 127.0.0.1 projeto-senac.local
 ```
 
-### 5️⃣ Acessar o projeto no navegador
+Reinicie o Apache e acesse `http://projeto-senac.local`.
 
-Abra no navegador:
+> **Alternativa sem VirtualHost:** coloque o projeto em `C:/xampp/htdocs/projeto-senac` e acesse via `http://localhost/projeto-senac`. Ajuste `APP_URL` no `.env` de acordo.
 
-```txt
-http://projeto-senac.local
+---
+
+## Conceitos que você vai aprender
+
+- **MVC** — separação entre dados (Model), lógica (Controller) e apresentação (View)
+- **Front Controller** — uma única entrada (`index.php`) para todas as requisições
+- **Rotas amigáveis** — URLs limpas no lugar de `?pagina=login`
+- **PDO e prepared statements** — acesso seguro ao banco de dados
+- **Sessões seguras** — autenticação e controle de acesso
+- **CSRF** — proteção contra ataques em formulários
+- **Flash messages** — mensagens temporárias entre requisições
+- **Autoload PSR-4** — organização de classes com Composer
+- **Variáveis de ambiente** — configuração sem expor dados sensíveis no código
+
+---
+
+## Uso básico
+
+### Criar uma rota
+
+```php
+// routes/web.php
+$router->get('/contato', 'ContactController@index');
+$router->post('/contato', 'ContactController@send');
 ```
+
+### Criar um controller
+
+```php
+// app/Controllers/ContactController.php
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Core\Message;
+
+class ContactController extends Controller
+{
+    public function index(): void
+    {
+        echo $this->view->render('contact', ['title' => 'Contato']);
+    }
+
+    public function send(): void
+    {
+        Message::success('Mensagem enviada com sucesso!');
+        redirect('/contact');
+    }
+}
+```
+
+### Criar um model
+
+```php
+// app/Models/Product.php
+namespace App\Models;
+
+use App\Core\AbstractModel;
+
+class Product extends AbstractModel
+{
+    protected string $table = 'products';
+    protected array $fillable = ['name', 'price', 'description'];
+    protected array $required = [
+        'name'  => 'O campo nome é obrigatório.',
+        'price' => 'O campo preço é obrigatório.',
+    ];
+}
+```
+
+### Proteger uma rota
+
+```php
+use App\Core\Auth;
+
+public function dashboard(): void
+{
+    Auth::requireLogin(); // redireciona para /login se não estiver logado
+    echo $this->view->render('dashboard', ['title' => 'Painel']);
+}
+```
+
+### Exibir flash messages na view
+
+```php
+<?php include __DIR__ . '/../partials/flash.php'; ?>
+```
+
+---
+
+## Autor
+
+Desenvolvido por **Pedro Leandro Gomes da Silva**
+Professor de Tecnologia — Senac Maranhão
+
+Projeto criado para fins educacionais no curso Programador Web.
+
+---
+
+## Licença
+
+MIT — use, estude, modifique e compartilhe.
