@@ -23,17 +23,6 @@ class Auth
         return isset($user->role_id) ? (int) $user->role_id : null;
     }
 
-    public static function hasPermission(string $permission): bool
-    {
-        $roleId = self::roleId();
-
-        if (!$roleId) {
-            return false;
-        }
-
-        return RolePermission::userHasPermission($roleId, $permission);
-    }
-
     public static function logout(): void
     {
         $session = new Session();
@@ -60,5 +49,16 @@ class Auth
             redirect("/erro/403");
             return;
         }
+    }
+
+    public static function hasPermission(string $permission): bool
+    {
+        $roleId = self::roleId();
+
+        if (!$roleId) {
+            return false;
+        }
+
+        return RolePermission::userHasPermission($roleId, $permission);
     }
 }
