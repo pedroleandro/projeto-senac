@@ -2,9 +2,10 @@
 
 Mini framework MVC desenvolvido em PHP puro para fins educacionais. Inspirado em frameworks modernos como o Laravel, mas com estrutura simples e transparente — ideal para aprender como uma aplicação web funciona por dentro.
 
-![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue?logo=php)
+![PHP](https://img.shields.io/badge/PHP-8.2-blue?logo=php)
 ![Composer](https://img.shields.io/badge/Composer-Autoload-orange?logo=composer)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwindcss)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
 
 ---
@@ -33,6 +34,7 @@ O professor explica como funciona. O aluno usa como base e constrói em cima.
 | **Variáveis de ambiente** | `vlucas/phpdotenv` para configuração via `.env` |
 | **Paginação** | `coffeecode/paginator` incluso |
 | **Tailwind CSS** | CDN incluído nas views, pronto para uso imediato |
+| **Docker** | Ambiente completo com PHP 8.2, Nginx e MySQL prontos para rodar |
 
 ---
 
@@ -62,6 +64,12 @@ projeto-senac/
 │       └── partials/       # Componentes reutilizáveis (ex: flash.php)
 ├── config/
 │   └── app.php             # Constantes da aplicação
+├── docker/
+│   ├── nginx/
+│   │   └── default.conf    # Configuração do Nginx
+│   └── php/
+│       ├── Dockerfile      # Imagem PHP 8.2-FPM
+│       └── php.ini         # Configurações PHP
 ├── public/
 │   ├── css/
 │   └── js/
@@ -71,8 +79,10 @@ projeto-senac/
 │   ├── sessions/
 │   └── uploads/
 ├── .env                    # Suas configurações locais (não sobe para o Git)
-├── .env.example            # Modelo de configuração
-├── .htaccess               # Redireciona tudo para index.php
+├── .env.docker             # Modelo de configuração para Docker
+├── .env.example            # Modelo de configuração para XAMPP
+├── .htaccess               # Redireciona tudo para index.php (Apache)
+├── docker-compose.yml      # Orquestração dos containers
 ├── composer.json
 └── index.php               # Front Controller — ponto de entrada único
 ```
@@ -81,14 +91,79 @@ projeto-senac/
 
 ## Como instalar
 
-### Requisitos
+### Opção 1 — Docker (recomendado)
 
+A forma mais simples de rodar o projeto. Não precisa instalar PHP, Apache ou MySQL na máquina.
+
+**Requisitos**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e rodando
+
+**Passo a passo**
+
+**1. Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/projeto-senac.git
+cd projeto-senac
+```
+
+**2. Configure o ambiente**
+```bash
+cp .env.docker .env
+```
+
+Edite o `.env` se quiser mudar o nome do banco ou as credenciais.
+
+**3. Suba os containers**
+```bash
+docker-compose up -d
+```
+
+Na primeira vez o Docker vai baixar as imagens — aguarde alguns minutos.
+
+**4. Instale as dependências**
+```bash
+docker-compose exec app composer install
+```
+
+**5. Acesse no navegador**
+
+| Endereço | O quê |
+|---|---|
+| `http://localhost:8080` | Aplicação |
+| `http://localhost:8081` | phpMyAdmin |
+
+---
+
+**Comandos Docker úteis**
+
+```bash
+# Ver se os containers estão rodando
+docker-compose ps
+
+# Parar os containers
+docker-compose down
+
+# Ver logs em tempo real
+docker-compose logs -f
+
+# Entrar no container PHP
+docker-compose exec app bash
+
+# Reiniciar apenas o Nginx
+docker-compose restart nginx
+```
+
+---
+
+### Opção 2 — XAMPP (Apache local)
+
+**Requisitos**
 - PHP 8.1+
 - Composer
 - Apache com `mod_rewrite` ativado (XAMPP funciona bem)
 - MySQL 5.7+ ou MariaDB
 
-### Passo a passo
+**Passo a passo**
 
 **1. Clone o repositório**
 ```bash
@@ -105,6 +180,7 @@ composer install
 ```bash
 cp .env.example .env
 ```
+
 Edite o `.env` com seus dados de banco e URL.
 
 **4. Configure o VirtualHost no Apache**
@@ -146,6 +222,7 @@ Reinicie o Apache e acesse `http://projeto-senac.local`.
 - **Flash messages** — mensagens temporárias entre requisições
 - **Autoload PSR-4** — organização de classes com Composer
 - **Variáveis de ambiente** — configuração sem expor dados sensíveis no código
+- **Docker** — ambiente isolado e reproduzível em qualquer máquina
 
 ---
 
@@ -155,8 +232,8 @@ Reinicie o Apache e acesse `http://projeto-senac.local`.
 
 ```php
 // routes/web.php
-$router->get('/contato', 'ContactController@index');
-$router->post('/contato', 'ContactController@send');
+$router->get('/contact', 'ContactController@index');
+$router->post('/contact', 'ContactController@send');
 ```
 
 ### Criar um controller
@@ -209,7 +286,7 @@ use App\Core\Auth;
 
 public function dashboard(): void
 {
-    Auth::requireLogin(); // redireciona para /login se não estiver logado
+    Auth::requireLogin();
     echo $this->view->render('dashboard', ['title' => 'Painel']);
 }
 ```
@@ -218,6 +295,19 @@ public function dashboard(): void
 
 ```php
 <?php include __DIR__ . '/../partials/flash.php'; ?>
+```
+
+---
+
+## Padrão de commits
+
+Este projeto segue o padrão **Conventional Commits** com descrições em português no infinitivo:
+
+```
+feat: adicionar nova funcionalidade
+fix: corrigir comportamento incorreto
+refactor: reorganizar código sem mudar comportamento
+docs: atualizar documentação
 ```
 
 ---
